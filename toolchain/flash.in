@@ -1,4 +1,4 @@
-device ${DEVICE}
+device EFR32MG1PXXXF256
 h
 loadbin ${BINARY}, ${FLASH_ORIGIN}
 verifybin ${BINARY}, ${FLASH_ORIGIN}
