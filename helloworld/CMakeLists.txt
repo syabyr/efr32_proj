@@ -16,8 +16,10 @@ cmake_minimum_required(VERSION 2.8.4)
 # Optional verbose mode, uncomment or pass in -DCMAKE_VERBOSE_MAKEFILE=ON
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-set(BASE_LOCATION ../../efm32-base)
+set(BASE_LOCATION ../../efr32_base)
 message ( STATUS "BASE_LOCATION = ${BASE_LOCATION}.")
+
+set(BOARD TRADFRI)
 
 set(CMAKE_C_COMPILER arm-none-eabi-gcc)
 set(CMAKE_AR arm-none-eabi-ar)
@@ -70,7 +72,10 @@ AUX_SOURCE_DIRECTORY(./ SOURCE_FILES)
 AUX_SOURCE_DIRECTORY(./src SOURCE_FILES)
 
 # Generate executable and link
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+add_executable(${PROJECT_NAME} 
+	${BASE_LOCATION}/hardware/kit/common/drivers/retargetserial.c
+	${BASE_LOCATION}/hardware/kit/common/drivers/retargetio.c
+	${SOURCE_FILES})
 
 efm32_configure_linker_addresses(${PROJECT_NAME})
 
