@@ -8,6 +8,7 @@ add_library(${PROJECT_NAME} ${SOURCE_FILES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC 
 		inc
+		rail
 		${BASE_LOCATION}/cmsis/Include
 		${BASE_LOCATION}/emlib/inc
 		${BASE_LOCATION}/hardware/kit/common/drivers/
