@@ -78,7 +78,7 @@ I2C_TransferReturn_TypeDef i2cReadByte(I2C_TypeDef *i2c,uint16_t addr,uint8_t co
 
     if (result != i2cTransferDone)
     {
-        printf("trans failed:%d\r\n",result);
+        //printf("trans failed:%d\r\n",result);
         return result;
     }
 
@@ -142,22 +142,22 @@ int main(void)
     sta = I2C_TransferInit(I2C0, &seq);
 
 
-    /*
+
     for(int i=0;i<256;i++)
     {
         uint8_t value;
         I2C_TransferReturn_TypeDef result = i2cReadByte(I2C0,i,0x00,&value);
         if(result == i2cTransferDone)
         {
-            printf("0x%x:%d:%d\r\n",i,result,value);
+            printf("ok---------------0x%x:%d:%d\r\n",i,result,value);
         }
         else
         {
-            printf("0x%x:%d\r\n",i,result);
+            //sprintf("0x%x:%d\r\n",i,result);
         }
     }
-     */
 
+    /*
     sh1106g_init();
     sh1106g_cls();
     sh1106g_fill(0x0f);
@@ -169,7 +169,7 @@ int main(void)
     sh1106g_showstr(0,6,"1234547890123456",1);
     sh1106g_showstr(0,7,"1237567890123459",1);
     sh1106g_showstr(0,8,"3234567890623465",1);
-
+    */
 
 
 
@@ -179,7 +179,7 @@ int main(void)
     {
         Delay(1000);
         GPIO_PinOutToggle(LED_PORT, LED_PIN);
-        printf("helloworld\r\n");
+        //printf("helloworld\r\n");
     }
 }
 

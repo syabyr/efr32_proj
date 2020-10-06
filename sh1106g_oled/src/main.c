@@ -178,7 +178,10 @@ int main(void)
     while (1)
     {
         Delay(1000);
+        sh1106g_on();
         GPIO_PinOutToggle(LED_PORT, LED_PIN);
+        Delay(1000);
+        sh1106g_off();
         printf("helloworld\r\n");
     }
 }
