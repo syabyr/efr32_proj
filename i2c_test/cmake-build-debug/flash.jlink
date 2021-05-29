@@ -1,7 +1,0 @@
-device EFR32MG1PXXXF256
-h
-loadbin i2c_test.bin, 0x00000000
-verifybin i2c_test.bin, 0x00000000
-r
-g
-qc
