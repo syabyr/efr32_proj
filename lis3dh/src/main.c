@@ -135,6 +135,7 @@ int main(void)
         //I2C_TransferReturn_TypeDef result = i2cReadByte(I2C0,ADDRESS_LIS3DH,0x0f,&value);
         //printf("ok---------------%d:0x%x\r\n",result,value);
         read_value();
+        getTemp();
     }
 }
 

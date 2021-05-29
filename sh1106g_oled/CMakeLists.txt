@@ -13,6 +13,8 @@
 # Set minimum CMake version
 cmake_minimum_required(VERSION 2.8.4)
 
+set(COMPILER_PREFIX /Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/)
+
 # Optional verbose mode, uncomment or pass in -DCMAKE_VERBOSE_MAKEFILE=ON
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
@@ -21,10 +23,10 @@ message ( STATUS "BASE_LOCATION = ${BASE_LOCATION}.")
 
 set(BOARD TRADFRI)
 
-set(CMAKE_C_COMPILER arm-none-eabi-gcc)
-set(CMAKE_AR arm-none-eabi-ar)
+set(CMAKE_C_${COMPILER_PREFIX}/COMPILER arm-none-eabi-gcc)
+set(CMAKE_AR ${COMPILER_PREFIX}/arm-none-eabi-ar)
 
-#set(COMPILER_PREFIX /Users/mybayswang/develop/efr32/toolchains/7.2_2017q4/bin/)
+
 
 # Set the compiler (must be prior to project setup)
 include(../toolchain/arm-gcc.cmake)

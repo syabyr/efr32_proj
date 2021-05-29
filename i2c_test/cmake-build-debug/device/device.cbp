@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="device"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\efr32_base\;CMake Files\..\..\efr32_base\cmsis\;CMake Files\..\..\efr32_base\device\;CMake Files\..\..\efr32_base\emlib\;CMake Files\..\..\efr32_base\hardware\;CMake Files\..\..\efr32_base\protocol\;CMake Files\..\toolchain\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/device"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j16 -f &quot;/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/device/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j16 -f &quot;/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/device/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j16 -f &quot;/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/device/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j16 -f &quot;/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/device/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="device">
+				<Option output="/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/device/libdevice.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/device"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DEFR32MG1P132F256IM32"/>
+					<Add directory="/Users/mybays/develop/efr32/efr32_base/device/EFR32MG1P/Include"/>
+					<Add directory="/Users/mybays/develop/efr32/efr32_base/cmsis/Include"/>
+					<Add directory="/Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/include/c++/7.2.1"/>
+					<Add directory="/Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/include/c++/7.2.1/arm-none-eabi"/>
+					<Add directory="/Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/include/c++/7.2.1/backward"/>
+					<Add directory="/Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/include"/>
+					<Add directory="/Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/include-fixed"/>
+					<Add directory="/Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j16 -f &quot;/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/device/Makefile&quot;  VERBOSE=1 device"/>
+					<CompileFile command="/usr/bin/make -j16 -f &quot;/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/device/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j16 -f &quot;/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/device/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j16 -f &quot;/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/device/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="device/fast">
+				<Option output="/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/device/libdevice.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/device"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DEFR32MG1P132F256IM32"/>
+					<Add directory="/Users/mybays/develop/efr32/efr32_base/device/EFR32MG1P/Include"/>
+					<Add directory="/Users/mybays/develop/efr32/efr32_base/cmsis/Include"/>
+					<Add directory="/Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/include/c++/7.2.1"/>
+					<Add directory="/Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/include/c++/7.2.1/arm-none-eabi"/>
+					<Add directory="/Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/include/c++/7.2.1/backward"/>
+					<Add directory="/Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/include"/>
+					<Add directory="/Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/include-fixed"/>
+					<Add directory="/Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j16 -f &quot;/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/device/Makefile&quot;  VERBOSE=1 device/fast"/>
+					<CompileFile command="/usr/bin/make -j16 -f &quot;/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/device/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j16 -f &quot;/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/device/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j16 -f &quot;/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/device/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_base/device/EFR32MG1P/Source/GCC/startup_efr32mg1p.S">
+			<Option target="device"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_base/device/EFR32MG1P/Source/system_efr32mg1p.c">
+			<Option target="device"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../../efr32_base/cmsis/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\efr32_base\cmsis\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../../efr32_base/device/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\efr32_base\device\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../../efr32_base/emlib/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\efr32_base\emlib\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../../efr32_base/hardware/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\efr32_base\hardware\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../../efr32_base/protocol/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\efr32_base\protocol\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../toolchain/arm-gcc.cmake">
+			<Option virtualFolder="CMake Files\..\toolchain\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../toolchain/efm32-base.cmake">
+			<Option virtualFolder="CMake Files\..\toolchain\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../toolchain/flash.in">
+			<Option virtualFolder="CMake Files\..\toolchain\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../toolchain/jlink.cmake">
+			<Option virtualFolder="CMake Files\..\toolchain\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../toolchain/post-build.cmake">
+			<Option virtualFolder="CMake Files\..\toolchain\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

@@ -18,6 +18,7 @@
 #include "em_chip.h"
 #include "em_cmu.h"
 #include "em_emu.h"
+#include "em_rmu.h"
 #include "em_gpio.h"
 #include "em_usart.h"
 
@@ -74,7 +75,7 @@ int main(void)
 
     // Get the last Reset Cause
     uint32_t rstCause = RMU_ResetCauseGet();
-    printf("reset reason:%d\r\n",rstCause);
+    printf("reset reason:%ld\r\n",rstCause);
     RMU_ResetCauseClear();
 
 

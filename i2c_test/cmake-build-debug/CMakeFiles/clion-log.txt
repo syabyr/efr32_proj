@@ -1,0 +1,46 @@
+/Users/mybays/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/mybays/develop/efr32/efr32_proj/i2c_test
+CMake Deprecation Warning at CMakeLists.txt:14 (cmake_minimum_required):
+  Compatibility with CMake < 2.8.12 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value or use a ...<max> suffix to tell
+  CMake that the project does not need compatibility with older versions.
+
+
+-- BASE_LOCATION = ../../efr32_base.
+Device: EFR32MG1P132F256IM32
+Processor: EFR32MG1P132F256IM32
+Family: EFR32MG1P
+Architecture: cortex-m4
+Adding device library for: EFR32MG1P
+Found bluetooth specific linker script, using this instead:
+ before: /Users/mybays/develop/efr32/efr32_base/device/EFR32MG1P/Source/GCC/efr32mg1p.ld
+ after: /Users/mybays/develop/efr32/efr32_base/protocol/bluetooth/ble_stack/linker/GCC/efr32mg1p132f256im32.ld
+Board defined, adding hardware library for: EFR32MG1P_TRADFRI
+COMPILER_PREFIX =/Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/
+CMAKE_SOURCE_DIR =/Users/mybays/develop/efr32/efr32_proj/i2c_test
+CMAKE_C_COMPILER =/Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/arm-none-eabi-gcc
+CMAKE_C_FLAGS =-std=gnu99 -Wextra -Wall -Wno-unused-parameter -mcpu=cortex-m4 -mthumb -fno-builtin -ffunction-sections -fdata-sections -fomit-frame-pointer   --specs=nano.specs -MMD -MP
+CMAKE_C_LINK_EXECUTABLE =<CMAKE_C_COMPILER> <FLAGS> <CMAKE_C_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES>
+CMAKE_EXE_LINKER_FLAGS =-Wextra -Wall -Wno-unused-parameter -mcpu=cortex-m4 -mthumb -fno-builtin -ffunction-sections -fdata-sections -fomit-frame-pointer  -Xlinker -T/Users/mybays/develop/efr32/efr32_base/protocol/bluetooth/ble_stack/linker/GCC/efr32mg1p132f256im32.ld -Wl,-Map=/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/i2c_test.map -Wl,--gc-sections -Wl,-v
+CMAKE_AR =arm-none-eabi-ar
+Definitions: 
+-- -DEFR32MG1P132F256IM32
+Includes: 
+-- /Users/mybays/develop/efr32/efr32_proj/i2c_test/../../efr32_base/include
+-- /Users/mybays/develop/efr32/efr32_proj/i2c_test/./inc
+Libraries:
+-- -lgcc
+-- -lc
+-- -lnosys
+-- -lgcc
+-- -lc
+-- -lnosys
+-- emlib
+-- cmsis
+-- device
+-- hardware
+-- protocol
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug

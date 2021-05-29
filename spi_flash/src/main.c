@@ -75,7 +75,7 @@ int main(void)
 
     // Get the last Reset Cause
     uint32_t rstCause = RMU_ResetCauseGet();
-    printf("reset reason:%d\r\n",rstCause);
+    printf("reset reason:%ld\r\n",rstCause);
     RMU_ResetCauseClear();
 
 

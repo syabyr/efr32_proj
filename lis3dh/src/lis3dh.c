@@ -49,6 +49,7 @@ int lis3dh_init(void)
     result = i2cReadByte(I2C0,ADDRESS_LIS3DH,CTRL_REG1,&value);
     printf("CTRL_REG1:%d:0x%x\r\n",result,value);
 
+
     result = i2cWriteByte(I2C0,ADDRESS_LIS3DH,CTRL_REG4,0x80);
     if(0 != result)
     {
@@ -57,6 +58,15 @@ int lis3dh_init(void)
 
     result = i2cReadByte(I2C0,ADDRESS_LIS3DH,CTRL_REG4,&value);
     printf("CTRL_REG4:%d:0x%x\r\n",result,value);
+
+    result = i2cWriteByte(I2C0,ADDRESS_LIS3DH,TEMP_CFG_REG,0xC0);
+    if(0 != result)
+    {
+        printf("WriteCmd:%d\r\n",result);
+    }
+
+    result = i2cReadByte(I2C0,ADDRESS_LIS3DH,TEMP_CFG_REG,&value);
+    printf("TEMP_CFG_REG:%d:0x%x\r\n",result,value);
 
     return 0;
 }
@@ -99,7 +109,7 @@ void read_value()
 
     seq.addr = ADDRESS_LIS3DH;
     seq.flags = I2C_FLAG_WRITE_READ;
-    i2c_write_data[0] = 0x28|0x80;
+    i2c_write_data[0] = OUT_X_L|0x80;
     //i2c_write_data[1] = val;
     seq.buf[0].data   = i2c_write_data;
     seq.buf[0].len    = 1;
@@ -139,4 +149,44 @@ void read_value()
         sprintf(temp,"Z:%6d",zVal);
         sh1106g_showstr(0,3,temp,1);
     }
+}
+
+int8_t getTemp(void)
+{
+    //range from -40 °C to +85 °C
+    //read data
+    I2C_TransferReturn_TypeDef result;
+    I2C_TransferSeq_TypeDef    seq;
+    uint8_t i2c_write_data[1]={0};
+    uint8_t i2c_read_data[2]={0};
+
+    seq.addr = ADDRESS_LIS3DH;
+    seq.flags = I2C_FLAG_WRITE_READ;
+    i2c_write_data[0] = OUT_ADC3_L|0x80;
+    seq.buf[0].data   = i2c_write_data;
+    seq.buf[0].len    = 1;
+
+    seq.buf[1].data = i2c_read_data;
+    seq.buf[1].len  = 2;
+
+    result = I2C_TransferInit(I2C0, &seq);
+
+    while(result == i2cTransferInProgress)
+    {
+        result = I2C_Transfer(I2C0);
+    }
+
+    if (result != i2cTransferDone)
+    {
+        printf("trans failed:%d\r\n",result);
+    }
+    else
+    {
+        int16_t buff=(i2c_read_data[1]<<8)|i2c_read_data[0];
+
+        printf("temp:%6d\r\n",buff);
+
+    }
+
+    return 0;
 }

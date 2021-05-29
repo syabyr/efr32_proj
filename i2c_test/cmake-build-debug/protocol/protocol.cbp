@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="protocol"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\efr32_base\;CMake Files\..\..\efr32_base\cmsis\;CMake Files\..\..\efr32_base\device\;CMake Files\..\..\efr32_base\emlib\;CMake Files\..\..\efr32_base\hardware\;CMake Files\..\..\efr32_base\protocol\;CMake Files\..\toolchain\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/protocol"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j16 -f &quot;/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/protocol/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j16 -f &quot;/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/protocol/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j16 -f &quot;/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/protocol/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j16 -f &quot;/Users/mybays/develop/efr32/efr32_proj/i2c_test/cmake-build-debug/protocol/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../../efr32_base/cmsis/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\efr32_base\cmsis\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../../efr32_base/device/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\efr32_base\device\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../../efr32_base/emlib/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\efr32_base\emlib\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../../efr32_base/hardware/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\efr32_base\hardware\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../../efr32_base/protocol/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\efr32_base\protocol\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../toolchain/arm-gcc.cmake">
+			<Option virtualFolder="CMake Files\..\toolchain\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../toolchain/efm32-base.cmake">
+			<Option virtualFolder="CMake Files\..\toolchain\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../toolchain/flash.in">
+			<Option virtualFolder="CMake Files\..\toolchain\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../toolchain/jlink.cmake">
+			<Option virtualFolder="CMake Files\..\toolchain\"/>
+		</Unit>
+		<Unit filename="/Users/mybays/develop/efr32/efr32_proj/i2c_test/../toolchain/post-build.cmake">
+			<Option virtualFolder="CMake Files\..\toolchain\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
