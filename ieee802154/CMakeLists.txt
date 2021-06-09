@@ -97,14 +97,25 @@ if (${HAS_PROTOCOL})
     target_link_libraries(${PROJECT_NAME} protocol)
 endif ()
 
-
-
 ##### Post build #####
 
 # Add post build commands
 include(../toolchain/post-build.cmake)
 
 # Add JLink commands
+
+if(${DEVICE} STREQUAL "EFR32MG1P132F256IM32")
+    set(JLINK_TYPE "EFR32MG1PXXXF256")
+elseif(${DEVICE} STREQUAL "EFR32MG13P732F512GM48")
+    set(JLINK_TYPE "EFR32MG13PXXXF512")
+elseif(${DEVICE} STREQUAL "EFR32MG21A010F768IM32")
+    set(JLINK_TYPE "EFR32MG21PXXXF768")
+else()
+    set(JLINK_TYPE "none")
+endif ()
+
+message("jlinkdevice: ${JLINK_TYPE}")
+
 include(../toolchain/jlink.cmake)
 
 ##### CMake debug prints #####

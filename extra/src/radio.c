@@ -316,6 +316,11 @@ static void radio_channel_set(unsigned channel)
 	RAIL_StartRx(rail, channel, NULL);
 }
 
+void set_channel(int channel)
+{
+    radio_channel_set(channel);
+}
+
 void radio_init(void)
 {
 	// do not re-init

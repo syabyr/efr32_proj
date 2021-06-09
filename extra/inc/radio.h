@@ -18,6 +18,7 @@
 #define MAC_PACKET_INFO_LENGTH  2
 
 extern void radio_init(void);
+extern void set_channel(int channel);
 
 extern uint8_t radio_mac_address[8];
 

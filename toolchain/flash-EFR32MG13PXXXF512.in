@@ -1,0 +1,7 @@
+device EFR32MG13PXXXF512
+h
+loadbin ${BINARY}, ${FLASH_ORIGIN}
+verifybin ${BINARY}, ${FLASH_ORIGIN}
+r
+g
+qc

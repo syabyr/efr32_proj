@@ -5,7 +5,7 @@
 
 # Configure flasher script for the project
 set(BINARY ${PROJECT_NAME}.bin)
-configure_file(${CMAKE_CURRENT_LIST_DIR}/flash.in ${CMAKE_CURRENT_BINARY_DIR}/flash.jlink)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/flash-${JLINK_TYPE}.in ${CMAKE_CURRENT_BINARY_DIR}/flash.jlink)
 
 #Add JLink commands
 add_custom_target(debug
@@ -48,9 +48,9 @@ add_custom_target(e
 	)
 
 add_custom_target(reset 
-	COMMAND JLinkExe -device ${DEVICE} -speed 4000 -if SWD -CommanderScript ${CMAKE_CURRENT_LIST_DIR}/reset.jlink 
+	COMMAND JLinkExe -device ${DEVICE} -speed 4000 -if SWD -CommanderScript ${CMAKE_CURRENT_LIST_DIR}/reset-${JLINK_TYPE}.jlink
 	)
 
 add_custom_target(r 
-	COMMAND JLinkExe -device ${DEVICE} -speed 4000 -if SWD -CommanderScript ${CMAKE_CURRENT_LIST_DIR}/reset.jlink 
+	COMMAND JLinkExe -device ${DEVICE} -speed 4000 -if SWD -CommanderScript ${CMAKE_CURRENT_LIST_DIR}/reset-${JLINK_TYPE}.jlink
 	)
