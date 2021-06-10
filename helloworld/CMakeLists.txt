@@ -23,6 +23,23 @@ message ( STATUS "BASE_LOCATION = ${BASE_LOCATION}.")
 
 set(BOARD TRADFRI)
 
+# Set device
+if (BOARD STREQUAL "TRADFRI" )
+    set(DEVICE "EFR32MG1P132F256IM32")
+    set(JLINK_TYPE "EFR32MG1PXXXF256")
+elseif (BOARD STREQUAL "TYZS3")
+    set(DEVICE "EFR32MG13P732F512GM48")
+    set(JLINK_TYPE "EFR32MG13PXXXF512")
+elseif (BOARD STREQUAL "ZS3L")
+    set(DEVICE "EFR32MG21A010F768IM32")
+    set(JLINK_TYPE "EFR32MG21PXXXF768")
+else ()
+    message("Unknown Board type:${BOARD}")
+    exit()
+endif ()
+
+message("jlinkdevice: ${JLINK_TYPE}")
+
 set(CMAKE_C_${COMPILER_PREFIX}/COMPILER arm-none-eabi-gcc)
 set(CMAKE_AR ${COMPILER_PREFIX}/arm-none-eabi-ar)
 
@@ -36,10 +53,6 @@ include(../toolchain/arm-gcc.cmake)
 # Configure project and languages
 project(helloworld C CXX ASM)
 
-# Set device
-if (NOT DEVICE)
-    set(DEVICE EFR32MG1P132F256IM32)
-endif ()
 
 # Set build
 if (NOT CMAKE_BUILD_TYPE)
@@ -62,7 +75,7 @@ add_subdirectory(${BASE_LOCATION}/hardware hardware)
 
 # This is normally set in efm32-base.cmake, but libraries may modify it so set
 # it after libraries/subdirectories have been added
-set(CMAKE_EXE_LINKER_FLAGS "${COMMON_DEFINITIONS} -Xlinker -T${LINKER_SCRIPT} -Wl,-Map=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.map -Wl,--gc-sections -Wl,-v")
+set(CMAKE_EXE_LINKER_FLAGS "${COMMON_DEFINITIONS} -Xlinker -T${LINKER_SCRIPT} -Wl,-Map=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.map -Wl,--gc-sections -Wl,-v -u _printf_float")
 
 ##### Files #####
 

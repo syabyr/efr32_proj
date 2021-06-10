@@ -23,6 +23,23 @@ message ( STATUS "BASE_LOCATION = ${BASE_LOCATION}.")
 
 set(BOARD TYZS3)
 
+# Set device
+if (BOARD STREQUAL "TRADFRI" )
+    set(DEVICE "EFR32MG1P132F256IM32")
+    set(JLINK_TYPE "EFR32MG1PXXXF256")
+elseif (BOARD STREQUAL "TYZS3")
+    set(DEVICE "EFR32MG13P732F512GM48")
+    set(JLINK_TYPE "EFR32MG13PXXXF512")
+elseif (BOARD STREQUAL "ZS3L")
+    set(DEVICE "EFR32MG21A010F768IM32")
+    set(JLINK_TYPE "EFR32MG21PXXXF768")
+else ()
+    message("Unknown Board type:${BOARD}")
+    exit()
+endif ()
+
+message("jlinkdevice: ${JLINK_TYPE}")
+
 set(CMAKE_C_${COMPILER_PREFIX}/COMPILER arm-none-eabi-gcc)
 set(CMAKE_AR ${COMPILER_PREFIX}/arm-none-eabi-ar)
 
@@ -36,10 +53,6 @@ include(../toolchain/arm-gcc.cmake)
 # Configure project and languages
 project(helloworld C CXX ASM)
 
-# Set device
-if (NOT DEVICE)
-    set(DEVICE EFR32MG13P732F512GM48)
-endif ()
 
 # Set build
 if (NOT CMAKE_BUILD_TYPE)
@@ -59,7 +72,6 @@ add_subdirectory(${BASE_LOCATION}/emlib emlib)
 add_subdirectory(${BASE_LOCATION}/device device)
 add_subdirectory(${BASE_LOCATION}/protocol protocol)
 add_subdirectory(${BASE_LOCATION}/hardware hardware)
-add_subdirectory(../extra extra)
 
 # This is normally set in efm32-base.cmake, but libraries may modify it so set
 # it after libraries/subdirectories have been added
@@ -69,10 +81,6 @@ set(CMAKE_EXE_LINKER_FLAGS "${COMMON_DEFINITIONS} -Xlinker -T${LINKER_SCRIPT} -W
 
 # Add project headers
 include_directories(${BASE_LOCATION}/include)
-include_directories(${BASE_LOCATION}/extra/inc)
-include_directories(../extra/inc)
-include_directories(../extra/rail)
-
 include_directories(./inc)
 
 AUX_SOURCE_DIRECTORY(./ SOURCE_FILES)
@@ -86,7 +94,7 @@ add_executable(${PROJECT_NAME}
 
 efm32_configure_linker_addresses(${PROJECT_NAME})
 
-target_link_libraries(${PROJECT_NAME} ${LIBS} emlib cmsis device extra)
+target_link_libraries(${PROJECT_NAME} ${LIBS} emlib cmsis device)
 
 # Link optional libraries if available
 if (${HAS_HARDWARE})
@@ -103,19 +111,6 @@ endif ()
 include(../toolchain/post-build.cmake)
 
 # Add JLink commands
-
-if(${DEVICE} STREQUAL "EFR32MG1P132F256IM32")
-    set(JLINK_TYPE "EFR32MG1PXXXF256")
-elseif(${DEVICE} STREQUAL "EFR32MG13P732F512GM48")
-    set(JLINK_TYPE "EFR32MG13PXXXF512")
-elseif(${DEVICE} STREQUAL "EFR32MG21A010F768IM32")
-    set(JLINK_TYPE "EFR32MG21PXXXF768")
-else()
-    set(JLINK_TYPE "none")
-endif ()
-
-message("jlinkdevice: ${JLINK_TYPE}")
-
 include(../toolchain/jlink.cmake)
 
 ##### CMake debug prints #####

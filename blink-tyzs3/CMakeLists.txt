@@ -26,14 +26,19 @@ set(BOARD TYZS3)
 # Set device
 if (BOARD STREQUAL "TRADFRI" )
     set(DEVICE "EFR32MG1P132F256IM32")
+    set(JLINK_TYPE "EFR32MG1PXXXF256")
 elseif (BOARD STREQUAL "TYZS3")
     set(DEVICE "EFR32MG13P732F512GM48")
+    set(JLINK_TYPE "EFR32MG13PXXXF512")
 elseif (BOARD STREQUAL "ZS3L")
     set(DEVICE "EFR32MG21A010F768IM32")
+    set(JLINK_TYPE "EFR32MG21PXXXF768")
 else ()
     message("Unknown Board type:${BOARD}")
     exit()
 endif ()
+
+message("jlinkdevice: ${JLINK_TYPE}")
 
 set(CMAKE_C_${COMPILER_PREFIX}/COMPILER arm-none-eabi-gcc)
 set(CMAKE_AR ${COMPILER_PREFIX}/arm-none-eabi-ar)
@@ -106,19 +111,6 @@ endif ()
 include(../toolchain/post-build.cmake)
 
 # Add JLink commands
-
-if(${DEVICE} STREQUAL "EFR32MG1P132F256IM32")
-    set(JLINK_TYPE "EFR32MG1PXXXF256")
-elseif(${DEVICE} STREQUAL "EFR32MG13P732F512GM48")
-    set(JLINK_TYPE "EFR32MG13PXXXF512")
-elseif(${DEVICE} STREQUAL "EFR32MG21A010F768IM32")
-    set(JLINK_TYPE "EFR32MG21PXXXF768")
-else()
-    set(JLINK_TYPE "none")
-endif ()
-
-message("jlinkdevice: ${JLINK_TYPE}")
-
 include(../toolchain/jlink.cmake)
 
 ##### CMake debug prints #####
