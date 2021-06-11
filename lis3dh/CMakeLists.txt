@@ -13,7 +13,16 @@
 # Set minimum CMake version
 cmake_minimum_required(VERSION 2.8.4)
 
-set(COMPILER_PREFIX /Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/)
+#set(COMPILER_PREFIX /Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/)
+
+if(NOT COMPILER_PREFIX)
+    set(CMAKE_C_COMPILER arm-none-eabi-gcc)
+    set(CMAKE_AR arm-none-eabi-ar)
+else ()
+    set(CMAKE_C_${COMPILER_PREFIX}/COMPILER arm-none-eabi-gcc)
+    set(CMAKE_AR ${COMPILER_PREFIX}/arm-none-eabi-ar)
+endif ()
+
 
 # Optional verbose mode, uncomment or pass in -DCMAKE_VERBOSE_MAKEFILE=ON
 set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -23,10 +32,22 @@ message ( STATUS "BASE_LOCATION = ${BASE_LOCATION}.")
 
 set(BOARD TRADFRI)
 
-set(CMAKE_C_${COMPILER_PREFIX}/COMPILER arm-none-eabi-gcc)
-set(CMAKE_AR ${COMPILER_PREFIX}/arm-none-eabi-ar)
+# Set device
+if (BOARD STREQUAL "TRADFRI" )
+    set(DEVICE "EFR32MG1P132F256IM32")
+    set(JLINK_TYPE "EFR32MG1PXXXF256")
+elseif (BOARD STREQUAL "TYZS3")
+    set(DEVICE "EFR32MG13P732F512GM48")
+    set(JLINK_TYPE "EFR32MG13PXXXF512")
+elseif (BOARD STREQUAL "ZS3L")
+    set(DEVICE "EFR32MG21A010F768IM32")
+    set(JLINK_TYPE "EFR32MG21PXXXF768")
+else ()
+    message("Unknown Board type:${BOARD}")
+    exit()
+endif ()
 
-
+message("jlinkdevice: ${JLINK_TYPE}")
 
 # Set the compiler (must be prior to project setup)
 include(../toolchain/arm-gcc.cmake)
@@ -36,10 +57,6 @@ include(../toolchain/arm-gcc.cmake)
 # Configure project and languages
 project(lis3dh C CXX ASM)
 
-# Set device
-if (NOT DEVICE)
-    set(DEVICE EFR32MG1P132F256IM32)
-endif ()
 
 # Set build
 if (NOT CMAKE_BUILD_TYPE)
@@ -103,8 +120,6 @@ endif ()
 if (${HAS_PROTOCOL})
     target_link_libraries(${PROJECT_NAME} protocol)
 endif ()
-
-
 
 ##### Post build #####
 
