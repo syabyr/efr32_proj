@@ -8,11 +8,6 @@
 #ifndef INC_LED_H_
 #define INC_LED_H_
 
-#define LED_PORT gpioPortB
-#define LED_PIN	13
-
-
-
 void initLed();
 void toggleLed();
 void ledOn();

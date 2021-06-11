@@ -1,12 +1,5 @@
 //EFM32 blink test
 
-#ifndef LED_PIN
-#define LED_PIN     5
-#endif
-#ifndef LED_PORT
-#define LED_PORT    gpioPortC
-#endif
-
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -15,6 +8,7 @@
 #include "em_cmu.h"
 #include "em_emu.h"
 #include "em_gpio.h"
+#include "config.h"
 
 volatile uint32_t msTicks; /* counts 1ms timeTicks */
 

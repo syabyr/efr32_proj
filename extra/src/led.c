@@ -8,6 +8,7 @@
 #include "em_gpio.h"
 
 #include "led.h"
+#include "config.h"
 
 void initLed()
 {

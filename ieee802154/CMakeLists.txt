@@ -71,6 +71,8 @@ endif ()
 # Add base libs (emlib, CMSIS, device files)
 include(../toolchain/efm32-base.cmake)
 
+set(WORKING_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+
 add_subdirectory(${BASE_LOCATION}/cmsis cmsis)
 add_subdirectory(${BASE_LOCATION}/emlib emlib)
 add_subdirectory(${BASE_LOCATION}/device device)

@@ -6,7 +6,9 @@ project(extra)
 AUX_SOURCE_DIRECTORY(./src SOURCE_FILES)
 add_library(${PROJECT_NAME} ${SOURCE_FILES})
 
-target_include_directories(${PROJECT_NAME} PUBLIC 
+target_include_directories(${PROJECT_NAME} PUBLIC
+		${WORKING_DIR}/
+		${WORKING_DIR}/inc
 		inc
 		rail
 		${BASE_LOCATION}/cmsis/Include
