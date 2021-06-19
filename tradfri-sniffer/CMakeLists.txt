@@ -30,7 +30,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(BASE_LOCATION ../../efr32_base)
 message ( STATUS "BASE_LOCATION = ${BASE_LOCATION}.")
 
-set(BOARD TYZS3)
+set(BOARD TRADFRI)
 
 # Set device
 if (BOARD STREQUAL "TRADFRI" )
@@ -55,7 +55,7 @@ include(../toolchain/arm-gcc.cmake)
 ##### Project Setup #####
 
 # Configure project and languages
-project(ieee802154 C CXX ASM)
+project(tradfri-sniffer C CXX ASM)
 
 
 # Set build
@@ -97,7 +97,7 @@ AUX_SOURCE_DIRECTORY(./ SOURCE_FILES)
 AUX_SOURCE_DIRECTORY(./src SOURCE_FILES)
 
 
-link_directories(../extra/rail/TARGET_EFR32MG13)
+link_directories(../extra/rail/TARGET_EFR32MG1)
 
 # Generate executable and link
 add_executable(${PROJECT_NAME} 
@@ -107,7 +107,7 @@ add_executable(${PROJECT_NAME}
 
 efm32_configure_linker_addresses(${PROJECT_NAME})
 
-target_link_libraries(${PROJECT_NAME} ${LIBS} extra rail_efr32xg13_gcc_release emlib cmsis device)
+target_link_libraries(${PROJECT_NAME} ${LIBS} extra rail_efr32xg1_gcc_release emlib cmsis device)
 
 # Link optional libraries if available
 if (${HAS_HARDWARE})

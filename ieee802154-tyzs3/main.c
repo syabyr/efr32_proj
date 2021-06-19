@@ -1,14 +1,5 @@
 //EFM32 blink test
 
-#ifndef LED_PIN
-#define LED_PIN     13
-#endif
-#ifndef LED_PORT
-#define LED_PORT    gpioPortB
-#endif
-
-
-
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -19,7 +10,6 @@
 #include "em_emu.h"
 #include "em_gpio.h"
 #include "em_usart.h"
-
 
 #include "led.h"
 #include "uart0.h"
@@ -128,8 +118,8 @@ int main(void)
     initTimer0();
 
     // Configure PB12 and PB13 as input with glitch filter enabled
-    GPIO_PinModeSet(gpioPortB, 12, gpioModeInputPullFilter, 1);
-    GPIO_PinModeSet(gpioPortB, 13, gpioModeInputPullFilter, 1);
+    GPIO_PinModeSet(gpioPortF, 4, gpioModeInputPullFilter, 1);
+    GPIO_PinModeSet(gpioPortF, 5, gpioModeInputPullFilter, 1);
 
     // Enable IRQ for even numbered GPIO pins
     NVIC_EnableIRQ(GPIO_EVEN_IRQn);
@@ -138,10 +128,14 @@ int main(void)
     NVIC_EnableIRQ(GPIO_ODD_IRQn);
 
     // Enable falling-edge interrupts for PB pins
-    GPIO_ExtIntConfig(gpioPortB, 12,12, 0, 1, true);
-    GPIO_ExtIntConfig(gpioPortB, 13, 13, 0, 1, true);
+    GPIO_ExtIntConfig(gpioPortF, 4,4, 0, 1, true);
+    GPIO_ExtIntConfig(gpioPortF, 5, 5, 0, 1, true);
 
     radio_init();
+
+    channel = 15;
+    set_channel(channel);
+
 
     zrepl_active = 1;
     static const char version[] = "hello ieee802.15.4" ;
