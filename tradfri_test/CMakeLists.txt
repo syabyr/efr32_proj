@@ -13,7 +13,7 @@
 # Set minimum CMake version
 cmake_minimum_required(VERSION 2.8.4)
 
-set(COMPILER_PREFIX /Users/mybays/develop/mcu-arch/efr32/toolchains/gnu_arm/7.2_2017q4/bin/)
+#set(COMPILER_PREFIX /Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/)
 
 if(NOT COMPILER_PREFIX)
     set(CMAKE_C_COMPILER arm-none-eabi-gcc)
@@ -55,7 +55,7 @@ include(../toolchain/arm-gcc.cmake)
 ##### Project Setup #####
 
 # Configure project and languages
-project(blink C CXX ASM)
+project(helloworld C CXX ASM)
 
 
 # Set build

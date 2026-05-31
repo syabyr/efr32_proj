@@ -13,17 +13,6 @@
 # Set minimum CMake version
 cmake_minimum_required(VERSION 2.8.4)
 
-set(COMPILER_PREFIX /Users/mybays/develop/mcu-arch/efr32/toolchains/gnu_arm/7.2_2017q4/bin/)
-
-if(NOT COMPILER_PREFIX)
-    set(CMAKE_C_COMPILER arm-none-eabi-gcc)
-    set(CMAKE_AR arm-none-eabi-ar)
-else ()
-    set(CMAKE_C_${COMPILER_PREFIX}/COMPILER arm-none-eabi-gcc)
-    set(CMAKE_AR ${COMPILER_PREFIX}/arm-none-eabi-ar)
-endif ()
-
-
 # Optional verbose mode, uncomment or pass in -DCMAKE_VERBOSE_MAKEFILE=ON
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
@@ -32,22 +21,10 @@ message ( STATUS "BASE_LOCATION = ${BASE_LOCATION}.")
 
 set(BOARD TRADFRI)
 
-# Set device
-if (BOARD STREQUAL "TRADFRI" )
-    set(DEVICE "EFR32MG1P132F256IM32")
-    set(JLINK_TYPE "EFR32MG1PXXXF256")
-elseif (BOARD STREQUAL "TYZS3")
-    set(DEVICE "EFR32MG13P732F512GM48")
-    set(JLINK_TYPE "EFR32MG13PXXXF512")
-elseif (BOARD STREQUAL "ZS3L")
-    set(DEVICE "EFR32MG21A010F768IM32")
-    set(JLINK_TYPE "EFR32MG21PXXXF768")
-else ()
-    message("Unknown Board type:${BOARD}")
-    exit()
-endif ()
+set(CMAKE_C_COMPILER arm-none-eabi-gcc)
+set(CMAKE_AR arm-none-eabi-ar)
 
-message("jlinkdevice: ${JLINK_TYPE}")
+#set(COMPILER_PREFIX /Users/mybayswang/develop/efr32/toolchains/7.2_2017q4/bin/)
 
 # Set the compiler (must be prior to project setup)
 include(../toolchain/arm-gcc.cmake)
@@ -55,8 +32,12 @@ include(../toolchain/arm-gcc.cmake)
 ##### Project Setup #####
 
 # Configure project and languages
-project(blink C CXX ASM)
+project(ds18b20 C CXX ASM)
 
+# Set device
+if (NOT DEVICE)
+    set(DEVICE EFR32MG1P132F256IM32)
+endif ()
 
 # Set build
 if (NOT CMAKE_BUILD_TYPE)
@@ -85,10 +66,19 @@ set(CMAKE_EXE_LINKER_FLAGS "${COMMON_DEFINITIONS} -Xlinker -T${LINKER_SCRIPT} -W
 
 # Add project headers
 include_directories(${BASE_LOCATION}/include)
+#include_directories(${BASE_LOCATION}/radio/rail_lib/common)
+#include_directories(${BASE_LOCATION}/radio/rail_lib/chip/efr32/efr32xg1x)
+#include_directories(${BASE_LOCATION}/radio/rail_lib)
+include_directories(./rail)
+
 include_directories(./inc)
 
 AUX_SOURCE_DIRECTORY(./ SOURCE_FILES)
 AUX_SOURCE_DIRECTORY(./src SOURCE_FILES)
+
+
+#link_directories(${BASE_LOCATION}/radio/rail_lib/autogen/librail_release/)
+link_directories(./rail/TARGET_EFR32_1)
 
 # Generate executable and link
 add_executable(${PROJECT_NAME} 
@@ -98,7 +88,7 @@ add_executable(${PROJECT_NAME}
 
 efm32_configure_linker_addresses(${PROJECT_NAME})
 
-target_link_libraries(${PROJECT_NAME} ${LIBS} emlib cmsis device)
+target_link_libraries(${PROJECT_NAME} ${LIBS} rail_efr32xg1_release emlib cmsis device)
 
 # Link optional libraries if available
 if (${HAS_HARDWARE})
@@ -108,6 +98,8 @@ endif ()
 if (${HAS_PROTOCOL})
     target_link_libraries(${PROJECT_NAME} protocol)
 endif ()
+
+
 
 ##### Post build #####
 

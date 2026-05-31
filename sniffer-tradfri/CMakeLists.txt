@@ -13,7 +13,7 @@
 # Set minimum CMake version
 cmake_minimum_required(VERSION 2.8.4)
 
-set(COMPILER_PREFIX /Users/mybays/develop/mcu-arch/efr32/toolchains/gnu_arm/7.2_2017q4/bin/)
+#set(COMPILER_PREFIX /Users/mybays/develop/efr32/toolchains/gnu_arm/7.2_2017q4/bin/)
 
 if(NOT COMPILER_PREFIX)
     set(CMAKE_C_COMPILER arm-none-eabi-gcc)
@@ -55,7 +55,7 @@ include(../toolchain/arm-gcc.cmake)
 ##### Project Setup #####
 
 # Configure project and languages
-project(blink C CXX ASM)
+project(tradfri-sniffer C CXX ASM)
 
 
 # Set build
@@ -71,11 +71,14 @@ endif ()
 # Add base libs (emlib, CMSIS, device files)
 include(../toolchain/efm32-base.cmake)
 
+set(WORKING_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+
 add_subdirectory(${BASE_LOCATION}/cmsis cmsis)
 add_subdirectory(${BASE_LOCATION}/emlib emlib)
 add_subdirectory(${BASE_LOCATION}/device device)
 add_subdirectory(${BASE_LOCATION}/protocol protocol)
 add_subdirectory(${BASE_LOCATION}/hardware hardware)
+add_subdirectory(../extra extra)
 
 # This is normally set in efm32-base.cmake, but libraries may modify it so set
 # it after libraries/subdirectories have been added
@@ -85,10 +88,16 @@ set(CMAKE_EXE_LINKER_FLAGS "${COMMON_DEFINITIONS} -Xlinker -T${LINKER_SCRIPT} -W
 
 # Add project headers
 include_directories(${BASE_LOCATION}/include)
+include_directories(${BASE_LOCATION}/extra/inc)
+include_directories(../extra/rail)
+
 include_directories(./inc)
 
 AUX_SOURCE_DIRECTORY(./ SOURCE_FILES)
 AUX_SOURCE_DIRECTORY(./src SOURCE_FILES)
+
+
+link_directories(../extra/rail/TARGET_EFR32MG1)
 
 # Generate executable and link
 add_executable(${PROJECT_NAME} 
@@ -98,7 +107,7 @@ add_executable(${PROJECT_NAME}
 
 efm32_configure_linker_addresses(${PROJECT_NAME})
 
-target_link_libraries(${PROJECT_NAME} ${LIBS} emlib cmsis device)
+target_link_libraries(${PROJECT_NAME} ${LIBS} extra rail_efr32xg1_gcc_release emlib cmsis device)
 
 # Link optional libraries if available
 if (${HAS_HARDWARE})

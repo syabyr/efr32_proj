@@ -1,15 +1,5 @@
 //EFM32 blink test
 
-#ifndef LED_PIN
-#define LED_PIN     11
-#endif
-#ifndef LED_PORT
-#define LED_PORT    gpioPortC
-#endif
-
-
-#include "InitDevice.h"
-
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -18,15 +8,18 @@
 #include "em_chip.h"
 #include "em_cmu.h"
 #include "em_emu.h"
-#include "em_rmu.h"
 #include "em_gpio.h"
 #include "em_usart.h"
 
-
-
+#include "led.h"
+#include "uart0.h"
+#include "sniffer.h"
+#include "timer.h"
 
 
 volatile uint32_t msTicks; /* counts 1ms timeTicks */
+
+int channel;
 
 void Delay(uint32_t dlyTicks);
 
@@ -51,8 +44,6 @@ void Delay(uint32_t dlyTicks)
     while ((msTicks - curTicks) < dlyTicks) ;
 }
 
-
-
 /**************************************************************************//**
  * @brief GPIO Even IRQ for pushbuttons on even-numbered pins
  *****************************************************************************/
@@ -62,7 +53,14 @@ void GPIO_EVEN_IRQHandler(void)
     GPIO_IntClear(0x5555);
 
     // Toggle LED0
-    printf("key1\r\n");
+
+    channel ++;
+    if(channel > 26)
+    {
+        channel = 11;
+    }
+    printf("set channel to %d\r\n",channel);
+    set_channel(channel);
 }
 
 /**************************************************************************//**
@@ -70,12 +68,8 @@ void GPIO_EVEN_IRQHandler(void)
  *****************************************************************************/
 void GPIO_ODD_IRQHandler(void)
 {
-    // Clear all odd pin interrupt flags
-    GPIO_IntClear(0xAAAA);
-
-    // Toggle LED01
-    printf("key2\r\n");
 }
+
 
 
 /**************************************************************************//**
@@ -85,54 +79,67 @@ int main(void)
 {
     CHIP_Init();
 
+    EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
+    EMU_DCDCInit(&dcdcInit);
+
+    CMU_HFXOInit_TypeDef hfxoInit = CMU_HFXOINIT_DEFAULT;
+    CMU_HFXOInit(&hfxoInit);
+
+    CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFXO);
+
+    CMU_ClockEnable(cmuClock_CORELE, true);
+
+    CMU_ClockEnable(cmuClock_RTCC, true);
+
+    CMU_ClockEnable(cmuClock_CRYPTO, true);
+
     CMU_ClockEnable(cmuClock_GPIO, true);
 
-    RETARGET_SerialInit();
-    RETARGET_ReadChar();
-    enter_DefaultMode_from_RESET();
-
-
-    printf("\r\nhelloworld:%f.\r\n",100.02);
-    printf("Silicon Labs UART Code example!\r\f");
-
-    // Get the last Reset Cause
-    uint32_t rstCause = RMU_ResetCauseGet();
-    printf("reset reason:%ld\r\n",rstCause);
-    RMU_ResetCauseClear();
-
+    CMU_ClockEnable(cmuClock_TIMER1, true );
 
     /* Setup SysTick Timer for 1 msec interrupts  */
     if (SysTick_Config(CMU_ClockFreqGet(cmuClock_CORE) / 1000)) while (1) ;
 
-    /* Initialize LED driver */
-    GPIO_PinModeSet(LED_PORT, LED_PIN, gpioModePushPull, 0);
 
-    GPIO_PinOutSet(LED_PORT, LED_PIN);
-
+    initUart0();
+    initLed();
+    initTimer0();
 
     // Configure PB12 and PB13 as input with glitch filter enabled
-    GPIO_PinModeSet(gpioPortB, 12, gpioModeInputPullFilter, 1);
-    GPIO_PinModeSet(gpioPortB, 13, gpioModeInputPullFilter, 1);
-
+    //GPIO_PinModeSet(gpioPortB, 12, gpioModeInputPullFilter, 1);
+    //GPIO_PinModeSet(gpioPortB, 13, gpioModeInputPullFilter, 1);
     GPIO_PinModeSet(gpioPortA, 0, gpioModeInputPullFilter, 1);
 
     // Enable IRQ for even numbered GPIO pins
     NVIC_EnableIRQ(GPIO_EVEN_IRQn);
 
     // Enable IRQ for odd numbered GPIO pins
-    NVIC_EnableIRQ(GPIO_ODD_IRQn);
+    //NVIC_EnableIRQ(GPIO_ODD_IRQn);
 
     // Enable falling-edge interrupts for PB pins
-    GPIO_ExtIntConfig(gpioPortB, 12,12, 0, 1, true);
-    GPIO_ExtIntConfig(gpioPortB, 13, 13, 0, 1, true);
-
+    //GPIO_ExtIntConfig(gpioPortB, 12,12, 0, 1, true);
+    //GPIO_ExtIntConfig(gpioPortB, 13, 13, 0, 1, true);
     GPIO_ExtIntConfig(gpioPortA, 0, 0, 0, 1, true);
+
+    radio_init();
+
+    channel = 15;
+    set_channel(channel);
+
+
+    zrepl_active = 1;
+    static const char version[] = "hello ieee802.15.4" ;
+    ieee802154_send(version, sizeof(version) - 1);
+    zrepl_active = 0;
+
+
+    printf("test\r\n");
 
     /* Infinite blink loop */
     while (1)
     {
         Delay(1000);
-        GPIO_PinOutToggle(LED_PORT, LED_PIN);
+        toggleLed();
         //printf("helloworld\r\n");
     }
 }
