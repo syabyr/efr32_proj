@@ -18,6 +18,8 @@ set(CMAKE_CXX_COMPILER ${COMPILER_PREFIX}arm-none-eabi-g++)
 set(CMAKE_ASM_COMPILER ${COMPILER_PREFIX}arm-none-eabi-g++)
 
 # Set other tools
+set(CMAKE_AR ${COMPILER_PREFIX}arm-none-eabi-ar)
+set(CMAKE_RANLIB ${COMPILER_PREFIX}arm-none-eabi-ranlib)
 set(OBJSIZE ${COMPILER_PREFIX}arm-none-eabi-size)
 set(OBJCOPY ${COMPILER_PREFIX}arm-none-eabi-objcopy)
 set(OBJDUMP ${COMPILER_PREFIX}arm-none-eabi-objdump)
