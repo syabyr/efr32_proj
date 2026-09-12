@@ -19,7 +19,8 @@ from struct import pack
 #stderr = os.fdopen(sys.stderr.fileno(), "wb")
 from sys import stdout, stderr
 
-device = "/dev/tty.usbmodem0000001901731"
+#device = "/dev/tty.usbmodem0000001901731"
+device = "/dev/tty.wchusbserial1430"
 speed = 115200
 dev = serial.Serial(device, speed)
 
@@ -42,7 +43,7 @@ typedef struct pcap_hdr_s {
         gint32  thiszone;       /* GMT to local correction */
         guint32 sigfigs;        /* accuracy of timestamps */
         guint32 snaplen;        /* max length of captured packets, in octets */
-        guint32 network;        /* data link type LINKTYPE_IEEE802_15_4_NOFCS	230 */
+        guint32 network;        /* data link type LINKTYPE_IEEE802_15_4_TAP	283 */
 } pcap_hdr_t;
 
 typedef struct pcaprec_hdr_s {
@@ -58,7 +59,7 @@ stdout.buffer.write(pack("<IHHiIII",
 	0,		# timezone is gmt
 	0,		# sigfigs
 	256,		# these are short packets
-	230,		# LINKTYPE_IEEE802_15_4_NOFCS
+	283,		# LINKTYPE_IEEE802_15_4_TAP
 ))
 stdout.flush()
 

@@ -25,6 +25,10 @@ extern uint8_t radio_mac_address[8];
 
 extern int zrepl_active;
 
+/* Set to 1 (by the RX path) each time a packet is received; the main
+ * loop polls and clears it to blink the activity LED. */
+extern volatile uint8_t sniffer_rx_flag;
+
 // "Multipurpose" frames are used (type 5), which have the minimum amount of
 // overhead.  There are two valid Frame Control Fields (FCF), one
 // for zrepl sends and one for zrepl receives.

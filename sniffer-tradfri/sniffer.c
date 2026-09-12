@@ -120,6 +120,9 @@ static uint8_t rx_buffer_copy[MAC_PACKET_MAX_LENGTH];
 
 uint8_t radio_tx_buffer[MAC_PACKET_MAX_LENGTH];
 
+/* set to 1 by the RX path on every received packet; cleared by main loop */
+volatile uint8_t sniffer_rx_flag;
+
 #define FRAME_TYPE_ACK	0x02
 
 /*
@@ -142,6 +145,69 @@ radio_tx_autoack(uint8_t seq)
 	int rc = RAIL_WriteAutoAckFifo(rail, ack_buf, 5);
 	printf("ack rc=%d\n", rc);
 	return rc;
+}
+
+
+/*
+ * Print a received 802.15.4 PSDU (without the PHY length byte and without
+ * FCS) preceded by an IEEE 802.15.4 TAP pseudo-header that carries the
+ * channel, RSSI and LQI metadata.  The whole thing is emitted as one hex
+ * line so that zbsniff can wrap it into a LINKTYPE_IEEE802_15_4_TAP pcap.
+ *
+ * TAP header layout (all little-endian, total 36 bytes):
+ *   version(1) reserved(1) length(2) = 36
+ *   TLV 0  FCS_TYPE : len 1, value 0 (no FCS)
+ *   TLV 1  RSS      : len 4, IEEE-754 float dBm
+ *   TLV 3  CHANNEL  : len 3, channel number(2) + channel page(1)
+ *   TLV 10 LQI      : len 1, link quality indicator
+ */
+static void output_tap_packet(const uint8_t * psdu, int len,
+		uint16_t channel, int8_t rssi, uint8_t lqi)
+{
+	union { float f; uint8_t b[4]; } rssi_u;
+	rssi_u.f = (float) rssi;
+
+	uint8_t hdr[36];
+	int i = 0;
+
+	hdr[i++] = 0x00;                     // version
+	hdr[i++] = 0x00;                     // reserved
+	hdr[i++] = sizeof(hdr) & 0xff;       // header length, LSB
+	hdr[i++] = sizeof(hdr) >> 8;         // header length, MSB
+
+	// FCS Type TLV (type 0, len 1)
+	hdr[i++] = 0x00; hdr[i++] = 0x00;
+	hdr[i++] = 0x01; hdr[i++] = 0x00;
+	hdr[i++] = 0x00;                     // FCS type = none
+	hdr[i++] = 0x00; hdr[i++] = 0x00; hdr[i++] = 0x00;
+
+	// RSS TLV (type 1, len 4)
+	hdr[i++] = 0x01; hdr[i++] = 0x00;
+	hdr[i++] = 0x04; hdr[i++] = 0x00;
+	hdr[i++] = rssi_u.b[0];
+	hdr[i++] = rssi_u.b[1];
+	hdr[i++] = rssi_u.b[2];
+	hdr[i++] = rssi_u.b[3];
+
+	// Channel Assignment TLV (type 3, len 3)
+	hdr[i++] = 0x03; hdr[i++] = 0x00;
+	hdr[i++] = 0x03; hdr[i++] = 0x00;
+	hdr[i++] = channel & 0xff;
+	hdr[i++] = channel >> 8;
+	hdr[i++] = 0x00;                     // channel page
+	hdr[i++] = 0x00;                     // pad
+
+	// LQI TLV (type 10, len 1)
+	hdr[i++] = 0x0a; hdr[i++] = 0x00;
+	hdr[i++] = 0x01; hdr[i++] = 0x00;
+	hdr[i++] = lqi;
+	hdr[i++] = 0x00; hdr[i++] = 0x00; hdr[i++] = 0x00;
+
+	for (int j = 0; j < i; j++)
+		printf("%02x", hdr[j]);
+	for (int j = 0; j < len; j++)
+		printf("%02x", psdu[j]);
+	printf("\r\n");
 }
 
 
@@ -207,27 +273,15 @@ static void process_packet(RAIL_Handle_t rail)
 				rx_buffer_write = 0;
 			else
 				rx_buffer_write = write_index + 1;
+
+			// signal the activity LED
+			sniffer_rx_flag = 1;
+
+			// forward the PSDU with a TAP pseudo-header (skip the
+			// length byte in buffer[0]; FCS is not included)
+			output_tap_packet(&rx_buffer[1], info.packetBytes - 1,
+					radio_channel, details.rssi, details.lqi);
 		}
-
-/*
-		// cancel the ACK if the sender did not request one
-		// buffer[0] == length
-		// buffer[1] == frame_type[0:2], security[3], frame_pending[4], ack_req[5], intrapan[6]
-		// buffer[2] == destmode[2:3], version[4:5], srcmode[6:7]
-		if ((rx_buffer[1] & (1 << 5)) == 0)
-			RAIL_CancelAutoAck(rail);
-*/
-
-#if 1
-		//printf("rx %2d bytes lqi=%d rssi=%d:", info.packetBytes, details.lqi, details.rssi);
-
-		// skip the length byte
-		for(int i = 1 ; i < info.packetBytes ; i++)
-		{
-			printf("%02x", rx_buffer[i]);
-		}
-		printf("\r\n");
-#endif
 	}
 
 done:

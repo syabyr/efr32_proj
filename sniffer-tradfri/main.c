@@ -19,7 +19,118 @@
 
 volatile uint32_t msTicks; /* counts 1ms timeTicks */
 
-int channel;
+/* Zigbee channels to cycle through (11..26) */
+static const int channels[] = { 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26 };
+#define CHANNEL_COUNT (sizeof(channels) / sizeof(channels[0]))
+static int channel_index = 4; /* start at channel 15 */
+
+#define BUTTON_DEBOUNCE_MS 50
+static volatile uint32_t last_button_ms;
+
+/* set by the button IRQ to request a "switched channel" LED blink */
+static volatile uint8_t switch_led_flag;
+
+/* apply the current channel_index: switch radio, echo, blink */
+static void channel_apply(void)
+{
+    set_channel(channels[channel_index]);
+    printf("CH %d\r\n", channels[channel_index]);
+    switch_led_flag = 1;
+}
+
+/* step the channel by delta (wraps around the table) */
+static void channel_step(int delta)
+{
+    channel_index = (channel_index + delta + CHANNEL_COUNT) % CHANNEL_COUNT;
+    channel_apply();
+}
+
+/* jump to an absolute channel (11..26), ignored if out of range */
+static void channel_set_abs(int ch)
+{
+    for (int i = 0; i < CHANNEL_COUNT; i++)
+    {
+        if (channels[i] == ch)
+        {
+            channel_index = i;
+            channel_apply();
+            return;
+        }
+    }
+    printf("ERR\r\n");
+}
+
+/* serial command parser state: accumulated absolute channel number */
+static int cmd_num = -1;
+
+static void cmd_feed(int c)
+{
+    switch (c)
+    {
+        case '+': case 'n': case 'N':
+            channel_step(+1);
+            cmd_num = -1;
+            break;
+        case '-': case 'p': case 'P':
+            channel_step(-1);
+            cmd_num = -1;
+            break;
+        case '?':
+            printf("CH %d\r\n", channels[channel_index]);
+            cmd_num = -1;
+            break;
+        case '0': case '1': case '2': case '3': case '4':
+        case '5': case '6': case '7': case '8': case '9':
+            if (cmd_num < 0)
+                cmd_num = 0;
+            cmd_num = cmd_num * 10 + (c - '0');
+            break;
+        case '\r': case '\n':
+            if (cmd_num >= 0)
+            {
+                channel_set_abs(cmd_num);
+                cmd_num = -1;
+            }
+            break;
+        default:
+            cmd_num = -1;
+            break;
+    }
+}
+
+/* non-blocking LED blink state machine, driven by msTicks */
+#define LED_HALF_MS 30
+static uint8_t  led_toggles_left;
+static uint32_t led_next_ms;
+
+static void led_service(void)
+{
+    if (led_toggles_left == 0)
+    {
+        if (switch_led_flag)
+        {
+            switch_led_flag = 0;
+            led_toggles_left = 4;   /* 2 blinks */
+        }
+        else if (sniffer_rx_flag)
+        {
+            sniffer_rx_flag = 0;
+            led_toggles_left = 2;   /* 1 blink */
+        }
+        else
+        {
+            return;
+        }
+        led_next_ms = msTicks;      /* toggle immediately */
+    }
+
+    if ((int32_t)(msTicks - led_next_ms) < 0)
+        return;
+
+    toggleLed();
+    led_toggles_left--;
+    led_next_ms = msTicks + LED_HALF_MS;
+}
 
 void Delay(uint32_t dlyTicks);
 
@@ -52,15 +163,13 @@ void GPIO_EVEN_IRQHandler(void)
     // Clear all even pin interrupt flags
     GPIO_IntClear(0x5555);
 
-    // Toggle LED0
+    // simple software debounce on top of the hardware glitch filter
+    uint32_t now = msTicks;
+    if (now - last_button_ms < BUTTON_DEBOUNCE_MS)
+        return;
+    last_button_ms = now;
 
-    channel ++;
-    if(channel > 26)
-    {
-        channel = 11;
-    }
-    printf("set channel to %d\r\n",channel);
-    set_channel(channel);
+    channel_step(+1);
 }
 
 /**************************************************************************//**
@@ -70,6 +179,17 @@ void GPIO_ODD_IRQHandler(void)
 {
 }
 
+/* blocking LED blink, called from the main loop only */
+static void led_blink(int times, uint32_t on_ms, uint32_t off_ms)
+{
+    for (int i = 0; i < times; i++)
+    {
+        ledOn();
+        Delay(on_ms);
+        ledOff();
+        Delay(off_ms);
+    }
+}
 
 
 /**************************************************************************//**
@@ -123,8 +243,7 @@ int main(void)
 
     radio_init();
 
-    channel = 15;
-    set_channel(channel);
+    set_channel(channels[channel_index]);
 
 
     zrepl_active = 1;
@@ -135,12 +254,20 @@ int main(void)
 
     printf("test\r\n");
 
-    /* Infinite blink loop */
+    /* Event-driven LED loop: blink on channel switch and on RX */
     while (1)
     {
-        Delay(1000);
-        toggleLed();
-        //printf("helloworld\r\n");
+        if (switch_led_flag)
+        {
+            switch_led_flag = 0;
+            led_blink(2, 40, 40);
+        }
+        if (sniffer_rx_flag)
+        {
+            sniffer_rx_flag = 0;
+            led_blink(1, 30, 30);
+        }
+        Delay(1);
     }
 }
 
