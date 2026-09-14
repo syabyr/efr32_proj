@@ -65,6 +65,12 @@ stdout.flush()
 
 def process_line(line):	
 	pkt = unhexlify(line)
+	# only forward valid IEEE 802.15.4 TAP frames: >= 36-byte pseudo
+	# header (version + reserved + length + TLVs) and version == 0.
+	# this filters out debug/echo text that would otherwise be
+	# misparsed into bogus packets.
+	#if len(pkt) < 36 or pkt[0] != 0x00:
+	#	return
 	seconds = time.time()
 	microseconds = (seconds * 1e6) % 1e6
 

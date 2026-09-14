@@ -21,7 +21,7 @@ volatile uint32_t msTicks; /* counts 1ms timeTicks */
 
 /* Zigbee channels to cycle through (11..26) */
 static const int channels[] = { 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26 };
-#define CHANNEL_COUNT (sizeof(channels) / sizeof(channels[0]))
+#define CHANNEL_COUNT ((int)(sizeof(channels) / sizeof(channels[0])))
 static int channel_index = 4; /* start at channel 15 */
 
 #define BUTTON_DEBOUNCE_MS 50
@@ -179,18 +179,6 @@ void GPIO_ODD_IRQHandler(void)
 {
 }
 
-/* blocking LED blink, called from the main loop only */
-static void led_blink(int times, uint32_t on_ms, uint32_t off_ms)
-{
-    for (int i = 0; i < times; i++)
-    {
-        ledOn();
-        Delay(on_ms);
-        ledOff();
-        Delay(off_ms);
-    }
-}
-
 
 /**************************************************************************//**
  * @brief  Main function
@@ -254,19 +242,15 @@ int main(void)
 
     printf("test\r\n");
 
-    /* Event-driven LED loop: blink on channel switch and on RX */
+    /* Event-driven loop: service serial input and LED, non-blocking */
     while (1)
     {
-        if (switch_led_flag)
-        {
-            switch_led_flag = 0;
-            led_blink(2, 40, 40);
-        }
-        if (sniffer_rx_flag)
-        {
-            sniffer_rx_flag = 0;
-            led_blink(1, 30, 30);
-        }
+        int c;
+        while ((c = RETARGET_ReadChar()) >= 0)
+            cmd_feed(c);
+
+        led_service();
+
         Delay(1);
     }
 }
